@@ -52,12 +52,12 @@ need to perform some initial setup steps before you can develop your action.
 
    ```bash
    $ npm test
-
+   
    PASS  ./index.test.js
      ✓ throws invalid number (3ms)
      ✓ wait 500 ms (504ms)
      ✓ test runs (95ms)
-
+   
    ...
    ```
 
@@ -84,7 +84,7 @@ There are a few things to keep in mind when writing your action code:
   ```javascript
   const core = require('@actions/core')
   //...
-
+  
   async function run() {
     try {
       //...
@@ -197,3 +197,27 @@ steps:
     id: output
     run: echo "${{ steps.run-action.outputs.time }}"
 ```
+
+
+
+-----
+
+# Process flow
+
+```mermaid
+flowchart LR
+	start((start))-->http[[PetaPico API request]]
+	http-->rows[/Rows/]-->date
+	subgraph "Per row"
+    date{Date threshold check?}
+    date -->|Older|finish
+    date -->|Newer|create
+    finish((end))
+	  
+	  create[["GitHub Issues API\n - create issue"]]-->finish
+	end
+```
+
+Where do we get the date threshold from? 
+Persisted somewhere or derived from `listForRepo`?
+
