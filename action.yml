@@ -3,18 +3,8 @@ description: 'FSR qualification workflow automation'
 author: 'GoFAIR Foundation'
 
 # Define your inputs here.
-# inputs:
-#   milliseconds:
-#     description: 'Your input description here'
-#     required: true
-#     default: '1000'
-
-# Define your outputs here.
-# outputs:
-#   time:
-#     description: 'Your output description here'
 steps:
-  - name: My action
+  - name: Import issues
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

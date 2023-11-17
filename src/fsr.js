@@ -1,13 +1,13 @@
 const httpm = require('@actions/http-client')
 const jsdom = require("jsdom");
 const { createIssue } = require('./issue');
-const { getRepoProperties } = require('./property');
 const { JSDOM } = jsdom;
 
 /**
  * Fetch unqualified FSRs and create issues for them in GitHub.
+ * @returns number of processed rows
  */
-async function fetchFSRs() {
+async function fetchFSRs(filterDate) {
   const api = "https://grlc.petapico.org/api/peta-pico/dsw-nanopub-api/list_nonqualified_fsr"
   const http = new httpm.HttpClient()
   const res = await http.get(api)
@@ -32,25 +32,21 @@ async function fetchFSRs() {
   //console.log(data);
 
   var rowCount = data.length
+  var processedCount = 0
   if (rowCount > 1) {
-    // if we have work to do, check the threshold date
-    const props = await getRepoProperties()
-    const filterDate = props.filter(obj => {
-        return obj.property_name === "fsr_import_date"
-    })[0].value
-    console.log(filterDate)
-    // FIXME: need to be able to PATCH the property (additional PAT permissions) 
-
     // skip the first row as that's the table header
     for (i = 1; i < rowCount; i++) {
         // date guard to prevent recreating records
         var recordDate = data[i][3]
         if (recordDate > filterDate) {
             console.log("Record date is in range")
-            createIssue('Test-' + data[i][1], data[i][0], data[i][2].split(', '))
+            createIssue(data[i][1], data[i][0], data[i][2].split(', '))
+            processedCount++
         }
     }
   }
+
+  return processedCount
 };
 
 module.exports = {

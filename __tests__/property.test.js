@@ -1,5 +1,5 @@
 /**
- * Unit tests for the action's Issue creation, src/issue.js
+ * Unit tests for obtaining the import date, src/property.js
  *
  */
 
@@ -30,9 +30,10 @@ describe('action', () => {
     jest.clearAllMocks()
   })
 
-  it('Fetch repo props', async () => {
-    var res = await props.getRepoProperties()
+  it('Fetch import date', async () => {
+    var res = await props.getImportDate()
 
-    // TODO: assertions
+    // assertions
+    expect(res).toBe("2020-05-04")
   })
 })

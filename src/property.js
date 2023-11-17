@@ -8,7 +8,7 @@ const octokit = new Octokit({
 /*
  * Wraps the GitHub octokit API.
  */
-exports.getRepoProperties = async function() {
+async function getRepoProperties() {
   console.log("Get properties")
   return await octokit.request('GET /repos/{owner}/{repo}/properties/values', {
     owner: 'gofair-foundation',
@@ -18,3 +18,39 @@ exports.getRepoProperties = async function() {
     }
   })
 };
+
+async function getRepoPropertyValue(propertyName) {
+  const props = await getRepoProperties()
+  const property = props.filter(obj => {
+      return obj.property_name === propertyName
+  })[0].value
+  console.log(property)
+  return property
+};
+
+async function getImportDate() {
+    const importDate = await getRepoPropertyValue("fsr_import_date")
+    return importDate
+};
+
+async function setImportDate(importDate) {
+  await octokit.request('PATCH /orgs/{org}/properties/values', {
+    org: 'gofair-foundation',
+    repository_names: [
+      'fsr_qualification'
+    ],
+    properties: [
+      {
+        property_name: 'fsr_import_date',
+        value: importDate
+      }
+    ],
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  })
+};
+
+module.exports = {
+  getImportDate, setImportDate
+}
