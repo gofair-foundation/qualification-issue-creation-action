@@ -13,7 +13,7 @@ async function run() {
 
   try {
     const importDate = await getImportDate()
-    console.log(`main: ${importDate}`)
+    core.debug(`Processing records after: ${importDate}`)
     const rowCount = await fsr.fetchFSRs(importDate)
     core.debug(`Processed ${rowCount} row(s)`)
 

@@ -1,3 +1,4 @@
+const core = require('@actions/core')
 const httpm = require('@actions/http-client')
 const jsdom = require('jsdom')
 const { createIssue } = require('./issue')
@@ -42,7 +43,7 @@ async function fetchFSRs(filterDate) {
       // date guard to prevent recreating records
       const recordDate = data[i][3]
       if (recordDate > filterDate) {
-        console.log('Record date is in range')
+        core.debug('Record date is in range')
         createIssue(data[i][1], data[i][0], data[i][2].split(', '))
         processedCount++
       }

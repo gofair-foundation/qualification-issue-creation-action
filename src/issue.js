@@ -1,3 +1,4 @@
+const core = require('@actions/core')
 const { createActionAuth } = require('@octokit/auth-action')
 
 const { Octokit } = require('@octokit/rest')
@@ -13,7 +14,7 @@ exports.createIssue = async function (
   issueDescription,
   issueLabels
 ) {
-  console.log(`Creating issues for ${issueName}`)
+  core.debug(`Creating issues for ${issueName}`)
   await octokit.request('POST /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
     repo: 'fsr_qualification',

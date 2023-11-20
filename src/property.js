@@ -1,3 +1,4 @@
+const core = require('@actions/core')
 const { createActionAuth } = require('@octokit/auth-action')
 
 const { Octokit } = require('@octokit/rest')
@@ -9,7 +10,7 @@ const octokit = new Octokit({
  * Wraps the GitHub octokit API.
  */
 async function getRepoProperties() {
-  console.log('Get properties')
+  core.debug('Fetch properties from GitHub API')
   return await octokit.request('GET /repos/{owner}/{repo}/properties/values', {
     owner: 'gofair-foundation',
     repo: 'fsr_qualification',
@@ -21,10 +22,10 @@ async function getRepoProperties() {
 
 async function getRepoPropertyValue(propertyName) {
   const props = await getRepoProperties()
-  const property = props.filter(obj => {
-    return obj.property_name === propertyName
-  })[0].value
-  console.log(property)
+  const property = props.find(
+    element => element.property_name === 'fsr_import_date'
+  ).value
+  core.debug(property)
   return property
 }
 

@@ -98,9 +98,23 @@ describe('action', () => {
     //expect(propertyMock.getImportDate).toHaveBeenCalledTimes(1)
     // expect(propertyMock2).toHaveBeenCalledTimes(1)
     //expect(fsrMock.mock.instances[0].fetchFSRs).toHaveBeenCalledWith("2020-05-04")
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Processed 1 row(s)')
     expect(debugMock).toHaveBeenNthCalledWith(
-      2,
+      1,
+      'Fetch properties from GitHub API'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(2, '2020-05-04')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      3,
+      'Processing records after: 2020-05-04'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(4, 'Record date is in range')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      5,
+      'Creating issues for Test - Research Object Hub (ROHub)'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(6, 'Processed 1 row(s)')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      7,
       expect.stringContaining('Setting fsr_import_date to ')
     )
   })
