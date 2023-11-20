@@ -2,13 +2,6 @@ name: 'qualification-issue-creation'
 description: 'FSR qualification workflow automation'
 author: 'GoFAIR Foundation'
 
-# Define your inputs here.
-steps:
-  - name: Import issues
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 runs:
   using: node20
   main: dist/index.js
