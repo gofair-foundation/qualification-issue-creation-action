@@ -8,24 +8,26 @@
 const core = require('@actions/core')
 const main = require('../src/main')
 
-jest.mock("@octokit/rest", () => {
+jest.mock('@octokit/rest', () => {
   // Return the mock constructed instance
   return {
     Octokit: jest.fn().mockImplementation(() => {
       return {
-        request: jest.fn().mockReturnValue([
-          {
-            "property_name": "fsr_import_date",
-            "value": "2020-05-04"
-          }
-        ])
+        request: jest.fn().mockReturnValue({
+          data: [
+            {
+              property_name: 'fsr_import_date',
+              value: '2020-05-04'
+            }
+          ]
+        })
       }
     })
   }
 })
 
 // Prepare the mock expectations
-let mockBody = `<html>
+const mockBody = `<html>
 <head>
 <title>HTML5 table</title>
 </head>
@@ -47,20 +49,22 @@ let mockBody = `<html>
 </body>
 </html>`
 
-mockResponse = {
-  message: { "code" : "200", "statusCode" : "200" }, // not sure which is used?
-  readBody: jest.fn().mockImplementation(() => { return mockBody } )
-}
-
-jest.mock("@actions/http-client", () => {
-// Return the mock constructed instance
-return {
-  HttpClient: jest.fn().mockImplementation(() => {
-    return {
-      get: jest.fn().mockReturnValue(mockResponse)
-    }
+const mockResponse = {
+  message: { code: '200', statusCode: '200' }, // not sure which is used?
+  readBody: jest.fn().mockImplementation(() => {
+    return mockBody
   })
 }
+
+jest.mock('@actions/http-client', () => {
+  // Return the mock constructed instance
+  return {
+    HttpClient: jest.fn().mockImplementation(() => {
+      return {
+        get: jest.fn().mockReturnValue(mockResponse)
+      }
+    })
+  }
 })
 
 // Mock the GitHub Actions core library
@@ -68,7 +72,7 @@ const debugMock = jest.spyOn(core, 'debug').mockImplementation()
 
 const propertyMock = jest.mock('../src/property', () => {
   return {
-    getImportDate: jest.fn().mockReturnValue("2020-05-04"),
+    getImportDate: jest.fn().mockReturnValue('2020-05-04'),
     setImportDate: jest.fn().mockImplementation()
   }
 })
@@ -96,8 +100,25 @@ describe('action', () => {
     //expect(propertyMock.getImportDate).toHaveBeenCalledTimes(1)
     // expect(propertyMock2).toHaveBeenCalledTimes(1)
     //expect(fsrMock.mock.instances[0].fetchFSRs).toHaveBeenCalledWith("2020-05-04")
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Processed 1 row(s)')
-    expect(debugMock).toHaveBeenNthCalledWith(2, expect.stringContaining('Setting fsr_import_date to '))
+    expect(debugMock).toHaveBeenNthCalledWith(
+      1,
+      'Fetch properties from GitHub API'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(2, '2020-05-04')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      3,
+      'Processing records after: 2020-05-04'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(4, 'Record date is in range')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      5,
+      'Creating issues for Test - Research Object Hub (ROHub)'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(6, 'Processed 1 row(s)')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      7,
+      expect.stringContaining('Setting fsr_import_date to ')
+    )
   })
 
   const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
@@ -111,9 +132,6 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
 
     // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'Fail'
-    )
+    expect(setFailedMock).toHaveBeenNthCalledWith(1, 'Fail')
   })
 })
