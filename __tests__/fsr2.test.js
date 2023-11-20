@@ -4,7 +4,7 @@
  */
 
 // Prepare the mock expectations
-let mockEmptyTableBody = `<!DOCTYPE html>
+const mockEmptyTableBody = `<!DOCTYPE html>
 <html>
 <head>
 <title>HTML5 table</title>
@@ -22,12 +22,14 @@ let mockEmptyTableBody = `<!DOCTYPE html>
 </body>
 </html>`
 
-mockNoRowResponse = {
-  message: { "code" : "200", "statusCode" : "200" }, // not sure which is used?
-  readBody: jest.fn().mockImplementation(() => { return mockEmptyTableBody } )
+const mockNoRowResponse = {
+  message: { code: '200', statusCode: '200' }, // not sure which is used?
+  readBody: jest.fn().mockImplementation(() => {
+    return mockEmptyTableBody
+  })
 }
 
-jest.mock("@actions/http-client", () => {
+jest.mock('@actions/http-client', () => {
   // Return the mock constructed instance
   return {
     HttpClient: jest.fn().mockImplementation(() => {
@@ -39,14 +41,14 @@ jest.mock("@actions/http-client", () => {
 })
 
 // Have to mock the create issue (or @octokit/rest) to prevent the API being invoked
-const issueMock = jest.mock("../src/issue", () => {
+const issueMock = jest.mock('../src/issue', () => {
   return {
     createIssue: jest.fn().mockImplementation(() => {
-      console.log('Mock createIssue was called');
+      console.log('Mock createIssue was called')
     })
   }
 })
-// If you really do want to invoke the API, 
+// If you really do want to invoke the API,
 // then comment out the above lines and supply a personal access token:
 //process.env.GITHUB_TOKEN = 'YOUR-TOKEN'
 
@@ -60,7 +62,7 @@ describe('action', () => {
 
   // Negative case: no rows in the table (alt return value for http-client)
   it('No rows', async () => {
-    const rowCount = await fsr.fetchFSRs("2020-05-04")
+    const rowCount = await fsr.fetchFSRs('2020-05-04')
     expect(rowCount).toBe(0)
 
     // assertions
@@ -68,7 +70,6 @@ describe('action', () => {
       // wait to allow the promise to resolve
       const mockInstance = issueMock.mock.instances[0]
       expect(mockInstance.createIssue).toHaveBeenCalledTimes(0)
-      done();
-    }, 5000);
+    }, 5000)
   })
 })

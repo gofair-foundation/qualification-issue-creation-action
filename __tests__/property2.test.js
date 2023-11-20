@@ -2,7 +2,7 @@
  * Unit tests for setting the import date, src/property.js
  */
 
-jest.mock("@octokit/rest", () => {
+jest.mock('@octokit/rest', () => {
   // Return the mock constructed instance
   return {
     Octokit: jest.fn().mockImplementation(() => {
@@ -12,7 +12,6 @@ jest.mock("@octokit/rest", () => {
     })
   }
 })
-
 
 // Test logic
 const props = require('../src/property')

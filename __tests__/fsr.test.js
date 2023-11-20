@@ -4,7 +4,7 @@
  */
 
 // Prepare the mock expectations
-let mockBody = `<!DOCTYPE html>
+const mockBody = `<!DOCTYPE html>
 <html>
 <head>
 <title>HTML5 table</title>
@@ -34,12 +34,14 @@ let mockBody = `<!DOCTYPE html>
 </body>
 </html>`
 
-mockResponse = {
-    message: { "code" : "200", "statusCode" : "200" }, // not sure which is used?
-    readBody: jest.fn().mockImplementation(() => { return mockBody } )
+const mockResponse = {
+  message: { code: '200', statusCode: '200' }, // not sure which is used?
+  readBody: jest.fn().mockImplementation(() => {
+    return mockBody
+  })
 }
 
-jest.mock("@actions/http-client", () => {
+jest.mock('@actions/http-client', () => {
   // Return the mock constructed instance
   return {
     HttpClient: jest.fn().mockImplementation(() => {
@@ -51,14 +53,14 @@ jest.mock("@actions/http-client", () => {
 })
 
 // Have to mock the create issue (or @octokit/rest) to prevent the API being invoked
-const issueMock = jest.mock("../src/issue", () => {
+const issueMock = jest.mock('../src/issue', () => {
   return {
     createIssue: jest.fn().mockImplementation(() => {
-      console.log('Mock createIssue was called');
+      console.log('Mock createIssue was called')
     })
   }
 })
-// If you really do want to invoke the API, 
+// If you really do want to invoke the API,
 // then comment out the above lines and supply a personal access token:
 //process.env.GITHUB_TOKEN = 'YOUR-TOKEN'
 
@@ -72,7 +74,7 @@ describe('action', () => {
 
   // Positive case
   it('Gets rows from HTML5', async () => {
-    const rowCount = await fsr.fetchFSRs("2020-05-04T09:10:11.012Z")
+    const rowCount = await fsr.fetchFSRs('2020-05-04T09:10:11.012Z')
 
     // assertions
     expect(rowCount).toBe(2)
@@ -80,13 +82,12 @@ describe('action', () => {
       // wait to allow the promise to resolve
       const mockInstance = issueMock.mock.instances[0]
       expect(mockInstance.createIssue).toHaveBeenCalledTimes(2)
-      done();
-    }, 5000);
+    }, 5000)
   })
 
   // Negative case: no new rows in the table (higher date)
   it('No new unprocessed rows', async () => {
-    const rowCount = await fsr.fetchFSRs("2023-11-15T17:16:48.968Z")
+    const rowCount = await fsr.fetchFSRs('2023-11-15T17:16:48.968Z')
     expect(rowCount).toBe(0)
 
     // assertions - this one fails with undefined - due to the clearAllMocks?
@@ -94,7 +95,6 @@ describe('action', () => {
     //   // wait to allow the promise to resolve
     //   const mockInstance = issueMock.mock.instances[0]
     //   expect(mockInstance.createIssue).toHaveBeenCalledTimes(0)
-    //   done();
     // }, 10000);
   })
 })
