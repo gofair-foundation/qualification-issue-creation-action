@@ -17,7 +17,7 @@ async function run() {
     const rowCount = await fsr.fetchFSRs(importDate)
     core.debug(`Processed ${rowCount} row(s)`)
 
-    var currentDateTime = new Date().toISOString()
+    const currentDateTime = new Date().toISOString()
     core.debug(`Setting fsr_import_date to ${currentDateTime}`)
     await setImportDate(currentDateTime)
   } catch (error) {
