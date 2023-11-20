@@ -22,7 +22,7 @@ async function getRepoProperties() {
 
 async function getRepoPropertyValue(propertyName) {
   const props = await getRepoProperties()
-  const property = props.find(
+  const property = props.data.find(
     element => element.property_name === 'fsr_import_date'
   ).value
   core.debug(property)
