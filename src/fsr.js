@@ -12,7 +12,8 @@ async function fetchFSRs(filterDate) {
   const api =
     'https://grlc.petapico.org/api/peta-pico/dsw-nanopub-api/list_nonqualified_fsr'
   const http = new httpm.HttpClient()
-  const res = await http.get(api)
+  const additionalHeaders = { ['accept']: 'text/html' }
+  const res = await http.get(api, additionalHeaders)
 
   // TODO: check the status is HTTP_OK
   //expect(res.message.statusCode).toBe(200)
