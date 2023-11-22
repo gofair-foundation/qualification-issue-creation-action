@@ -1,14 +1,13 @@
 const core = require('@actions/core')
 const httpm = require('@actions/http-client')
 const jsdom = require('jsdom')
-const { createIssue } = require('./issue')
 const { JSDOM } = jsdom
 
 /**
- * Fetch unqualified FSRs and create issues for them in GitHub.
- * @returns number of processed rows
+ * Fetch unqualified FSRs HTML table and converts them to JS objects.
+ * @returns Array of retrieved records
  */
-async function fetchFSRs(filterDate) {
+async function fetchFSRs() {
   const api =
     'https://grlc.petapico.org/api/peta-pico/dsw-nanopub-api/list_nonqualified_fsr'
   const http = new httpm.HttpClient()
@@ -16,7 +15,7 @@ async function fetchFSRs(filterDate) {
   const res = await http.get(api, additionalHeaders)
 
   // TODO: check the status is HTTP_OK
-  //expect(res.message.statusCode).toBe(200)
+  core.debug(`HTTP response status code: ${res.message.statusCode}`)
 
   const body = await res.readBody()
 
@@ -34,24 +33,14 @@ async function fetchFSRs(filterDate) {
   const data = [...oTable.rows].map(t =>
     [...t.children].map(u => u.innerHTML.replace(/\n|<.*?>/g, ''))
   )
-  //console.log(data);
 
-  const rowCount = data.length
-  let processedCount = 0
-  if (rowCount > 1) {
-    // skip the first row as that's the table header
-    for (let i = 1; i < rowCount; i++) {
-      // date guard to prevent recreating records
-      const recordDate = data[i][3]
-      if (recordDate > filterDate) {
-        core.debug('Record date is in range')
-        createIssue(data[i][1], data[i][0], data[i][2].split(', '))
-        processedCount++
-      }
-    }
-  }
-
-  return processedCount
+  // remove the table header
+  data.splice(0,1) 
+  
+  // convert from 2D array to array of objects
+  const records = data.map(x => ({'body': x[0], 'title': x[1], 'labels': x[2].split(', ')}))
+  
+  return records
 }
 
 module.exports = {

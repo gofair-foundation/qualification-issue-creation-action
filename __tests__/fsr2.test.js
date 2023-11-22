@@ -40,18 +40,6 @@ jest.mock('@actions/http-client', () => {
   }
 })
 
-// Have to mock the create issue (or @octokit/rest) to prevent the API being invoked
-const issueMock = jest.mock('../src/issue', () => {
-  return {
-    createIssue: jest.fn().mockImplementation(() => {
-      console.log('Mock createIssue was called')
-    })
-  }
-})
-// If you really do want to invoke the API,
-// then comment out the above lines and supply a personal access token:
-//process.env.GITHUB_TOKEN = 'YOUR-TOKEN'
-
 // Test logic
 const fsr = require('../src/fsr')
 
@@ -62,14 +50,10 @@ describe('action', () => {
 
   // Negative case: no rows in the table (alt return value for http-client)
   it('No rows', async () => {
-    const rowCount = await fsr.fetchFSRs('2020-05-04')
-    expect(rowCount).toBe(0)
+    const rows = await fsr.fetchFSRs()
 
     // assertions
-    setTimeout(() => {
-      // wait to allow the promise to resolve
-      const mockInstance = issueMock.mock.instances[0]
-      expect(mockInstance.createIssue).toHaveBeenCalledTimes(0)
-    }, 5000)
+    expect(rows.length).toBe(0)
+    expect(rows).toStrictEqual([])
   })
 })

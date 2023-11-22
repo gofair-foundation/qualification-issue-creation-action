@@ -1,25 +1,35 @@
 const core = require('@actions/core')
-const { getImportDate, setImportDate } = require('./property')
 const fsr = require('./fsr')
+const iss = require('./issue')
 
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run() {
-  // 1. Get the import date
-  // 2. Fetch new unqualified FSRs and create issues for them
-  // 3. Update the import date (`new Date().toISOString()`)
+async function run(pageSize) {
+
+  // 1. Get the GitHub issues set
+  // 2. Get the Unqualified FSRs set
+  // 3. Derive a close list based on set difference
+  // 4. Derive a create list based on set difference
+  // 5. Close list for each: closeIssue
+  // 6. Create list for each: createIssue
 
   try {
-    const importDate = await getImportDate()
-    core.debug(`Processing records after: ${importDate}`)
-    const rowCount = await fsr.fetchFSRs(importDate)
-    core.debug(`Processed ${rowCount} row(s)`)
+    core.debug(`Issues page size set to ${pageSize}`)
+    const issues = await iss.getAllOpenActionIssues(pageSize)
+    core.debug(`Retrieved ${issues.length} issue(s) from GitHub`)
+    const fsrs = await fsr.fetchFSRs()
+    core.debug(`Retrieved ${fsrs.length} unqualified FSR(s) from Petapico`)
 
-    const currentDateTime = new Date().toISOString()
-    core.debug(`Setting fsr_import_date to ${currentDateTime}`)
-    await setImportDate(currentDateTime)
+    // TODO: this isn't particularly efficient - use maps instead?
+    let obsolete = issues.filter(x => !fsrs.some(e => e.body === x.body));
+    let newlyUnqualified = fsrs.filter(x => !issues.some(e => e.body === x.body));
+
+    obsolete.forEach(x => (iss.closeIssue(x.number)))
+    core.debug(`Closed ${obsolete.length} obsolete issue(s)`)
+    newlyUnqualified.forEach(x => (iss.createIssue(x.title, x.body, x.labels)))
+    core.debug(`Created issue(s) for ${newlyUnqualified.length} new unqualified FSRs`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)

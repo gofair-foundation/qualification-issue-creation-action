@@ -3,4 +3,4 @@
  */
 const { run } = require('./main')
 
-run()
+run(100)

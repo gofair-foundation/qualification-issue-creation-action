@@ -29,4 +29,10 @@ describe('action', () => {
 
     // TODO: assertions
   })
+
+  it('Close an issue', async () => {
+    await iss.closeIssue(172)
+
+    // TODO: assertions
+  })
 })
