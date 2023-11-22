@@ -34,20 +34,16 @@ const mockBody = `<!DOCTYPE html>
 </body>
 </html>`
 
-const expectedRows =  [
+const expectedRows = [
   {
-    "body": "http://purl.org/np/RAx",
-    "labels": [
-      "Registry",
-    ],
-    "title": "Test ROHub"
+    body: 'http://purl.org/np/RAx',
+    labels: ['Registry'],
+    title: 'Test ROHub'
   },
   {
-    "body": "http://purl.org/np/RAS",
-    "labels": [
-      "FAIR-Practice",
-    ],
-    "title": "Test WDCC "
+    body: 'http://purl.org/np/RAS',
+    labels: ['FAIR-Practice'],
+    title: 'Test WDCC '
   }
 ]
 

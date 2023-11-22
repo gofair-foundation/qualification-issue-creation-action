@@ -10,11 +10,7 @@ const octokit = new Octokit({
  * Create an issue.
  * Wraps the GitHub octokit API.
  */
-async function createIssue(
-  issueName,
-  issueDescription,
-  issueLabels
-) {
+async function createIssue(issueName, issueDescription, issueLabels) {
   core.debug(`Creating issue for ${issueName}`)
   await octokit.request('POST /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
@@ -32,9 +28,7 @@ async function createIssue(
  * Close an issue.
  * Wraps the GitHub octokit API.
  */
-async function closeIssue(
-  issueNumber
-) {
+async function closeIssue(issueNumber) {
   core.debug(`Closing issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
@@ -52,7 +46,7 @@ async function closeIssue(
  * Get (up to 100) open issues for the repo that were created by an action.
  * Newest first (as that's the order from petapico).
  */
- async function getOpenActionIssuesPage(pageSize, issuePage) {
+async function getOpenActionIssuesPage(pageSize, issuePage) {
   core.debug(`Fetching open issues page ${issuePage}`)
   const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
@@ -69,22 +63,30 @@ async function closeIssue(
   })
 
   // map necessary fields & return
-  const records = response.data.map(x => ({'number': x.number, 'body': x.body, 'title': x.title}) )
+  const records = response.data.map(x => ({
+    number: x.number,
+    body: x.body,
+    title: x.title
+  }))
   return records
 }
 
 async function getAllOpenActionIssues(pageSize) {
   let pageNumber = 1
-  let results = Array()
+  const results = Array()
   let issuesPage = await getOpenActionIssuesPage(pageSize, pageNumber)
-  issuesPage.forEach(e => results.push(e))
+  for (const e of issuesPage) {
+    results.push(e)
+  }
   core.debug(`Issues in page: ${issuesPage.length}, page size: ${pageSize}`)
 
-  while(issuesPage.length === pageSize) {
+  while (issuesPage.length === pageSize) {
     pageNumber++
 
     issuesPage = await getOpenActionIssuesPage(pageSize, pageNumber)
-    issuesPage.forEach(e => results.push(e))
+    for (const e of issuesPage) {
+      results.push(e)
+    }
   }
 
   return results

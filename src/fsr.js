@@ -35,11 +35,15 @@ async function fetchFSRs() {
   )
 
   // remove the table header
-  data.splice(0,1) 
-  
+  data.splice(0, 1)
+
   // convert from 2D array to array of objects
-  const records = data.map(x => ({'body': x[0], 'title': x[1], 'labels': x[2].split(', ')}))
-  
+  const records = data.map(x => ({
+    body: x[0],
+    title: x[1],
+    labels: x[2].split(', ')
+  }))
+
   return records
 }
 

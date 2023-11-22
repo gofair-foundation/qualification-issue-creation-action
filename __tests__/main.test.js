@@ -15,8 +15,8 @@ jest.mock('@octokit/rest', () => {
       return {
         request: jest.fn().mockReturnValue({
           data: [
-            {'number': '34', 'body': 'baz', 'title': 'baz'},
-            {'number': '22', 'body': 'http://purl.org/np/RAS', 'title': 'Test WDCC'}
+            { number: '34', body: 'baz', title: 'baz' },
+            { number: '22', body: 'http://purl.org/np/RAS', title: 'Test WDCC' }
           ]
         })
       }
@@ -89,14 +89,32 @@ describe('action', () => {
     // Verify that the collaborators were called correctly
     expect(debugMock).toHaveBeenNthCalledWith(1, 'Issues page size set to 10')
     expect(debugMock).toHaveBeenNthCalledWith(2, 'Fetching open issues page 1')
-    expect(debugMock).toHaveBeenNthCalledWith(3, 'Issues in page: 2, page size: 10')
-    expect(debugMock).toHaveBeenNthCalledWith(4, 'Retrieved 2 issue(s) from GitHub')
-    expect(debugMock).toHaveBeenNthCalledWith(5, 'HTTP response status code: 200')
-    expect(debugMock).toHaveBeenNthCalledWith(6, 'Retrieved 2 unqualified FSR(s) from Petapico')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      3,
+      'Issues in page: 2, page size: 10'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(
+      4,
+      'Retrieved 2 issue(s) from GitHub'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(
+      5,
+      'HTTP response status code: 200'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(
+      6,
+      'Retrieved 2 unqualified FSR(s) from Petapico'
+    )
     expect(debugMock).toHaveBeenNthCalledWith(7, 'Closing issue 34')
     expect(debugMock).toHaveBeenNthCalledWith(8, 'Closed 1 obsolete issue(s)')
-    expect(debugMock).toHaveBeenNthCalledWith(9, 'Creating issue for Test ROHub')
-    expect(debugMock).toHaveBeenNthCalledWith(10, 'Created issue(s) for 1 new unqualified FSRs')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      9,
+      'Creating issue for Test ROHub'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(
+      10,
+      'Created issue(s) for 1 new unqualified FSRs'
+    )
   })
 
   const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
