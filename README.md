@@ -1,26 +1,11 @@
-# Create a JavaScript Action
+# Qualification Issue Action
 
 [![GitHub Super-Linter](https://github.com/actions/javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/actions/javascript-action/actions/workflows/ci.yml/badge.svg)
 
-Use this template to bootstrap the creation of a JavaScript action. :rocket:
+Use this template to bootstrap the creation of a JavaScript action. 
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
-
-## Create Your Own Action
-
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
-
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
 
 ## Initial Setup
 
@@ -72,30 +57,9 @@ inputs, and outputs for your action.
 
 ## Update the Action Code
 
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
+The [`src/`](./src/) directory is the heart of your action! 
 
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.js`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  const core = require('@actions/core')
-  //...
-  
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
-
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
+For more information about the GitHub Actions toolkit, see the [documentation](https://github.com/actions/toolkit/blob/master/README.md).
 
 So, what are you waiting for? Go ahead and start customizing your action!
 
@@ -137,66 +101,9 @@ So, what are you waiting for? Go ahead and start customizing your action!
 
 1. Create a pull request and get feedback on your action
 1. Merge the pull request into the `main` branch
+1. Create a tag
 
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v3
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
-```
-
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/javascript-action/actions)! :rocket:
-
-## Usage
-
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Run my Action
-    id: run-action
-    uses: actions/javascript-action@v1 # Commit with the `v1` tag
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.run-action.outputs.time }}"
-```
+Your action is now published! 
 
 
 
@@ -206,18 +113,20 @@ steps:
 
 ```mermaid
 flowchart LR
-	start((start))-->http[[PetaPico API request]]
-	http-->rows[/Rows/]-->date
+	start((start))-->pp[[PetaPico API request]]
+	pp-->rows[/Unqualified FSRs/]-->set
+	start-->gh[[GitHub API]]-->iss[/Issues/]-->set
 	subgraph "Per row"
-    date{Date threshold check?}
-    date -->|Older|finish
-    date -->|Newer|create
+    set{Set\ncomparison\nlogic}
+    set -->|Already exists|finish
+    set -->|Newly unqualified|create
+    set -->|Obsolete|close
+    set -->|Prematurely closed|reopen
     finish((end))
 	  
-	  create[["GitHub Issues API\n - create issue"]]-->finish
+	  create[["Create GitHub issue"]]-->finish
+	  close[["Close GitHub issue"]]-->finish
+	  reopen[["Reopen GitHub issue"]]-->finish
 	end
 ```
-
-Where do we get the date threshold from? 
-Persisted somewhere or derived from `listForRepo`?
 

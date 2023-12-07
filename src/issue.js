@@ -43,15 +43,33 @@ async function closeIssue(issueNumber) {
 }
 
 /*
- * Get (up to 100) open issues for the repo that were created by an action.
+ * Reopen an issue.
+ * Wraps the GitHub octokit API.
+ */
+async function reopenIssue(issueNumber) {
+  core.debug(`Reopening issue ${issueNumber}`)
+  await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
+    owner: 'gofair-foundation',
+    repo: 'fsr_qualification',
+    issue_number: issueNumber,
+    state: 'open',
+    state_reason: 'reopened',
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  })
+}
+
+/*
+ * Get (up to 100) issues for the repo that were created by an action.
  * Newest first (as that's the order from petapico).
  */
-async function getOpenActionIssuesPage(pageSize, issuePage) {
-  core.debug(`Fetching open issues page ${issuePage}`)
+async function getActionIssuesPage(pageSize, issuePage) {
+  core.debug(`Fetching all action-created issues, page ${issuePage}`)
   const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
     repo: 'fsr_qualification',
-    state: 'open',
+    state: 'all', // Can be one of: open, closed, all
     creator: 'app/github-actions',
     sort: 'created',
     direction: 'desc',
@@ -66,15 +84,16 @@ async function getOpenActionIssuesPage(pageSize, issuePage) {
   const records = response.data.map(x => ({
     number: x.number,
     body: x.body,
-    title: x.title
+    title: x.title,
+    state: x.state
   }))
   return records
 }
 
-async function getAllOpenActionIssues(pageSize) {
+async function getAllActionIssues(pageSize) {
   let pageNumber = 1
   const results = Array()
-  let issuesPage = await getOpenActionIssuesPage(pageSize, pageNumber)
+  let issuesPage = await getActionIssuesPage(pageSize, pageNumber)
   for (const e of issuesPage) {
     results.push(e)
   }
@@ -83,7 +102,7 @@ async function getAllOpenActionIssues(pageSize) {
   while (issuesPage.length === pageSize) {
     pageNumber++
 
-    issuesPage = await getOpenActionIssuesPage(pageSize, pageNumber)
+    issuesPage = await getActionIssuesPage(pageSize, pageNumber)
     for (const e of issuesPage) {
       results.push(e)
     }
@@ -95,5 +114,6 @@ async function getAllOpenActionIssues(pageSize) {
 module.exports = {
   createIssue,
   closeIssue,
-  getAllOpenActionIssues
+  reopenIssue,
+  getAllActionIssues
 }
