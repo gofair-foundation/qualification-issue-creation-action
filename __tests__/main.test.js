@@ -15,8 +15,19 @@ jest.mock('@octokit/rest', () => {
       return {
         request: jest.fn().mockReturnValue({
           data: [
-            { number: '34', body: 'baz', title: 'baz' },
-            { number: '22', body: 'http://purl.org/np/RAS', title: 'Test WDCC' }
+            { number: '34', body: 'baz', title: 'baz', state: 'open' },
+            {
+              number: '22',
+              body: 'http://purl.org/np/RAS',
+              title: 'Test WDCC',
+              state: 'open'
+            },
+            {
+              number: '11',
+              body: 'http://purl.org/np/RAv',
+              title: 'Test SKOS',
+              state: 'closed'
+            }
           ]
         })
       }
@@ -45,9 +56,15 @@ const mockBody = `<html>
   </tr>
   <tr>
     <td><a href="http://purl.org/np/RAS">http://purl.org/np/RAS</a></td>
-    <td><pre>Test WDCC </pre></td>
+    <td><pre>Test WDCC</pre></td>
     <td><pre>FAIR-Practice</pre></td>
     <td><pre>2023-10-22T21:43:36Z</pre></td>
+  </tr>
+  <tr>
+    <td><a href="http://purl.org/np/RAv">http://purl.org/np/RAv</a></td>
+    <td><pre>Test SKOS</pre></td>
+    <td><pre>Semantic-model</pre></td>
+    <td><pre>2022-09-22T11:23:34Z</pre></td>
   </tr>
 </table>
 </body>
@@ -88,14 +105,17 @@ describe('action', () => {
 
     // Verify that the collaborators were called correctly
     expect(debugMock).toHaveBeenNthCalledWith(1, 'Issues page size set to 10')
-    expect(debugMock).toHaveBeenNthCalledWith(2, 'Fetching open issues page 1')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      2,
+      'Fetching all action-created issues, page 1'
+    )
     expect(debugMock).toHaveBeenNthCalledWith(
       3,
-      'Issues in page: 2, page size: 10'
+      'Issues in page: 3, page size: 10'
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       4,
-      'Retrieved 2 issue(s) from GitHub'
+      'Retrieved 3 issue(s) from GitHub'
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       5,
@@ -103,7 +123,7 @@ describe('action', () => {
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       6,
-      'Retrieved 2 unqualified FSR(s) from Petapico'
+      'Retrieved 3 unqualified FSR(s) from Petapico'
     )
     expect(debugMock).toHaveBeenNthCalledWith(7, 'Closing issue 34')
     expect(debugMock).toHaveBeenNthCalledWith(8, 'Closed 1 obsolete issue(s)')
@@ -114,6 +134,11 @@ describe('action', () => {
     expect(debugMock).toHaveBeenNthCalledWith(
       10,
       'Created issue(s) for 1 new unqualified FSRs'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(11, 'Reopening issue 11')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      12,
+      'Reopened 1 unresolved issue(s)'
     )
   })
 
