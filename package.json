@@ -70,7 +70,7 @@
     "jsdom": "^22.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.5",
+    "@babel/core": "^7.23.7",
     "@babel/eslint-parser": "^7.23.3",
     "@babel/preset-env": "^7.23.5",
     "@vercel/ncc": "^0.38.1",
