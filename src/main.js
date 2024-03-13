@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const fsr = require('./fsr')
 const iss = require('./issue')
+const template = require('../src/template')
 
 /**
  * The main function for the action.
@@ -27,17 +28,23 @@ async function run(pageSize) {
     core.debug(`Retrieved ${fsrs.length} unqualified FSR(s) from Petapico`)
 
     // TODO: these comparisons aren't particularly efficient - use maps instead?
+    // With a templated body, we can't use use an equality check, so instead we
+    // check for the existence of the NanoPub URI within the first line of the issue body
 
     // Find the open issues without a corresponding unqualified FSR
-    const obsolete = openIssues.filter(x => !fsrs.some(e => e.body === x.body))
+    const obsolete = openIssues.filter(
+      x => !fsrs.some(e => e.np === x.firstLine)
+    )
 
     // Find unqualified FSRs without an issue (open or closed)
     const newlyUnqualified = fsrs.filter(
-      x => !issues.some(e => e.body === x.body)
+      x => !issues.some(e => e.firstLine === x.np)
     )
 
     // Intersection of closed issues and unqualified FSRs
-    const reopen = closedIssues.filter(x => fsrs.some(e => e.body === x.body))
+    const reopen = closedIssues.filter(x =>
+      fsrs.some(e => e.np === x.firstLine)
+    )
 
     // Process the three lists: close, create, reopen
     for (const x of obsolete) {
@@ -45,8 +52,12 @@ async function run(pageSize) {
     }
     core.debug(`Closed ${obsolete.length} obsolete issue(s)`)
 
+    // obtain the template
+    const bodySuffix = await template.fetchTemplate()
+
     for (const x of newlyUnqualified) {
-      await iss.createIssue(x.title, x.body, x.labels)
+      // The body is augmented by the issue template
+      await iss.createIssue(x.title, `${x.np}\n\n${bodySuffix}`, x.labels)
     }
     core.debug(
       `Created issue(s) for ${newlyUnqualified.length} new unqualified FSRs`

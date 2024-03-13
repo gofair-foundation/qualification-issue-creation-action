@@ -5,6 +5,7 @@
  * Specifically, the inputs listed in `action.yml` should be set as environment
  * variables following the pattern `INPUT_<INPUT_NAME>`.
  */
+process.env.GITHUB_WORKSPACE = '../fsr_qualification/'
 const core = require('@actions/core')
 const main = require('../src/main')
 
@@ -15,10 +16,15 @@ jest.mock('@octokit/rest', () => {
       return {
         request: jest.fn().mockReturnValue({
           data: [
-            { number: '34', body: 'baz', title: 'baz', state: 'open' },
+            {
+              number: '34',
+              body: 'baz\n# Review\n\n| Item     | Detail     |',
+              title: 'baz',
+              state: 'open'
+            },
             {
               number: '22',
-              body: 'http://purl.org/np/RAS',
+              body: 'http://purl.org/np/RAS\n# Review\n\n| Item     | Detail     |',
               title: 'Test WDCC',
               state: 'open'
             },

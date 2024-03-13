@@ -25,20 +25,26 @@ describe('action', () => {
   })
 
   it('Create an issue', async () => {
+    const createMock = jest.spyOn(iss, 'createIssue')
     await iss.createIssue('foo', 'bar', ['Registry', 'Service'])
 
     // TODO: assertions
+    expect(createMock).toHaveBeenCalled()
   })
 
   it('Close an issue', async () => {
+    const closeMock = jest.spyOn(iss, 'closeIssue')
     await iss.closeIssue(172)
 
     // TODO: assertions
+    expect(closeMock).toHaveBeenCalled()
   })
 
   it('Reopen an issue', async () => {
+    const reopenMock = jest.spyOn(iss, 'reopenIssue')
     await iss.reopenIssue(172)
 
     // TODO: assertions
+    expect(reopenMock).toHaveBeenCalled()
   })
 })

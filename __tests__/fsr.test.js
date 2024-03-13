@@ -36,12 +36,12 @@ const mockBody = `<!DOCTYPE html>
 
 const expectedRows = [
   {
-    body: 'http://purl.org/np/RAx',
+    np: 'http://purl.org/np/RAx',
     labels: ['Registry'],
     title: 'Test ROHub'
   },
   {
-    body: 'http://purl.org/np/RAS',
+    np: 'http://purl.org/np/RAS',
     labels: ['FAIR-Practice'],
     title: 'Test WDCC '
   }

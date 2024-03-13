@@ -1,7 +1,6 @@
 const core = require('@actions/core')
-const { createActionAuth } = require('@octokit/auth-action')
-
 const { Octokit } = require('@octokit/rest')
+const { createActionAuth } = require('@octokit/auth-action')
 const octokit = new Octokit({
   authStrategy: createActionAuth
 })
@@ -84,6 +83,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
   const records = response.data.map(x => ({
     number: x.number,
     body: x.body,
+    firstLine: String(x.body).split('\n')[0],
     title: x.title,
     state: x.state
   }))
@@ -111,9 +111,24 @@ async function getAllActionIssues(pageSize) {
   return results
 }
 
+/* This was used for migrating open issues to include the Markdown table. */
+// async function updateIssueBody(issueNumber, newBody) {
+//   core.debug(`Updating open issue ${issueNumber}`)
+//   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
+//     owner: 'gofair-foundation',
+//     repo: 'fsr_qualification',
+//     issue_number: issueNumber,
+//     body: newBody,
+//     headers: {
+//       'X-GitHub-Api-Version': '2022-11-28'
+//     }
+//   })
+// }
+
 module.exports = {
   createIssue,
   closeIssue,
   reopenIssue,
+  // updateIssueBody,
   getAllActionIssues
 }
