@@ -39,7 +39,7 @@ async function fetchFSRs() {
 
   // convert from 2D array to array of objects
   const records = data.map(x => ({
-    body: x[0],
+    np: x[0],
     title: x[1],
     labels: x[2].split(', ')
   }))

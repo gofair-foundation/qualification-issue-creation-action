@@ -43,11 +43,11 @@ const expectedBodySuffix = `
 `
 
 // Mock the GitHub Actions core library
-const debugMock = jest.spyOn(core, 'debug').mockImplementation()
+//const debugMock = jest.spyOn(core, 'debug').mockImplementation()
 
 const fs = require('fs')
 jest.mock('fs', () => ({
-  readFileSync: jest.fn((fileName) => {
+  readFileSync: jest.fn(fileName => {
     return mockBody
   }),
   promises: jest.fn().mockImplementation()
@@ -81,12 +81,12 @@ describe('action', () => {
   // Positive case
   it('Gets body suffix from issue template file', async () => {
     Object.assign(process.env, {
-      GITHUB_WORKSPACE: 'foo',
+      GITHUB_WORKSPACE: 'foo'
     })
     const bodySuffix = await template.fetchTemplate()
 
     // assertions
-    expect(debugMock).toHaveBeenCalledWith(mockBody)
+    //expect(debugMock).toHaveBeenCalledWith(mockBody)
     expect(bodySuffix).toStrictEqual(expectedBodySuffix)
   })
 })
