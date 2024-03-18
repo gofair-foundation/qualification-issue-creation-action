@@ -24,7 +24,7 @@ jest.mock('@octokit/rest', () => {
             },
             {
               number: '22',
-              body: 'http://purl.org/np/RAS\n# Review\n\n| Item     | Detail     |',
+              body: 'http://purl.org/np/RAS\r\n# Review\r\n\r\n| Item     | Detail     |',
               title: 'Test WDCC',
               state: 'open'
             },

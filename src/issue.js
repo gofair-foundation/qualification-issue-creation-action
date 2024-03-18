@@ -80,10 +80,11 @@ async function getActionIssuesPage(pageSize, issuePage) {
   })
 
   // map necessary fields & return
+  // #48 Remove any carriage returns from the first line
   const records = response.data.map(x => ({
     number: x.number,
     body: x.body,
-    firstLine: String(x.body).split('\n')[0],
+    firstLine: String(x.body).split('\n')[0].replace(/\r/g, ''),
     title: x.title,
     state: x.state
   }))
