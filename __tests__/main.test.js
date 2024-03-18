@@ -29,6 +29,12 @@ jest.mock('@octokit/rest', () => {
               state: 'open'
             },
             {
+              number: '23',
+              body: 'http://purl.org/np/RAS\n# Duplicate\n',
+              title: 'Test WDCC',
+              state: 'closed'
+            },
+            {
               number: '11',
               body: 'http://purl.org/np/RAv',
               title: 'Test SKOS',
@@ -117,11 +123,11 @@ describe('action', () => {
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       3,
-      'Issues in page: 3, page size: 10'
+      'Issues in page: 4, page size: 10'
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       4,
-      'Retrieved 3 issue(s) from GitHub'
+      'Retrieved 4 issue(s) from GitHub'
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       5,

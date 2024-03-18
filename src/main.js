@@ -42,9 +42,12 @@ async function run(pageSize) {
     )
 
     // Intersection of closed issues and unqualified FSRs
-    const reopen = closedIssues.filter(x =>
-      fsrs.some(e => e.np === x.firstLine)
-    )
+    const reopen = closedIssues
+      .filter(x => fsrs.some(e => e.np === x.firstLine))
+      .filter(
+        // check the open issues in case it was closed as a duplicate
+        c => !openIssues.some(o => o.firstLine === c.firstLine)
+      )
 
     // Process the three lists: close, create, reopen
     for (const x of obsolete) {
