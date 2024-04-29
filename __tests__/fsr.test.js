@@ -22,6 +22,7 @@ const mockBody = `<!DOCTYPE html>
     <td><a href="http://purl.org/np/RAx">http://purl.org/np/RAx</a></td>
     <td><pre>Test ROHub</pre></td>
     <td><pre>Registry</pre></td>
+    <td><pre>Registry</pre></td>
     <td><pre>2023-11-05T09:55:32Z</pre></td>
   </tr>
   <tr>

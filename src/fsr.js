@@ -41,7 +41,7 @@ async function fetchFSRs() {
   const records = data.map(x => ({
     np: x[0],
     title: x[1],
-    labels: x[2].split(', ')
+    labels: Array.from(new Set(x[2].split(', '))) // remove duplicates
   }))
 
   return records
