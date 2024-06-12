@@ -48,39 +48,77 @@ jest.mock('@octokit/rest', () => {
 })
 
 // Prepare the mock expectations
-const mockBody = `<html>
-<head>
-<title>HTML5 table</title>
-</head>
-<body>
-<table class="table table-striped table-sm table-borderless">
-  <tr>
-    <th>np</th>
-    <th>label</th>
-    <th>types</th>
-    <th>date</th>
-  </tr>
-  <tr>
-    <td><a href="http://purl.org/np/RAx">http://purl.org/np/RAx</a></td>
-    <td><pre>Test ROHub</pre></td>
-    <td><pre>Registry</pre></td>
-    <td><pre>2023-11-05T09:55:32Z</pre></td>
-  </tr>
-  <tr>
-    <td><a href="http://purl.org/np/RAS">http://purl.org/np/RAS</a></td>
-    <td><pre>Test WDCC</pre></td>
-    <td><pre>FAIR-Practice</pre></td>
-    <td><pre>2023-10-22T21:43:36Z</pre></td>
-  </tr>
-  <tr>
-    <td><a href="http://purl.org/np/RAv">http://purl.org/np/RAv</a></td>
-    <td><pre>Test SKOS</pre></td>
-    <td><pre>Semantic-model</pre></td>
-    <td><pre>2022-09-22T11:23:34Z</pre></td>
-  </tr>
-</table>
-</body>
-</html>`
+const mockBody = `{
+  "head" : {
+    "vars" : [
+      "np",
+      "label",
+      "types",
+      "date"
+    ]
+  },
+  "results" : {
+    "bindings" : [
+      {
+        "date" : {
+          "datatype" : "http://www.w3.org/2001/XMLSchema#dateTime",
+          "type" : "literal",
+          "value" : "2023-11-05T09:55:32Z"
+        },
+        "np" : {
+          "type" : "uri",
+          "value" : "http://purl.org/np/RAx"
+        },
+        "label" : {
+          "type" : "literal",
+          "value" : "Test ROHub"
+        },
+        "types" : {
+          "type" : "literal",
+          "value" : "Registry"
+        }
+      },
+      {
+        "date" : {
+          "datatype" : "http://www.w3.org/2001/XMLSchema#dateTime",
+          "type" : "literal",
+          "value" : "2023-10-22T21:43:36Z"
+        },
+        "np" : {
+          "type" : "uri",
+          "value" : "http://purl.org/np/RAS"
+        },
+        "label" : {
+          "type" : "literal",
+          "value" : "Test WDCC"
+        },
+        "types" : {
+          "type" : "literal",
+          "value" : "FAIR-Practice"
+        }
+      },
+      {
+        "date" : {
+          "datatype" : "http://www.w3.org/2001/XMLSchema#dateTime",
+          "type" : "literal",
+          "value" : "2022-09-22T11:23:34Z"
+        },
+        "np" : {
+          "type" : "uri",
+          "value" : "http://purl.org/np/RAv"
+        },
+        "label" : {
+          "type" : "literal",
+          "value" : "Test SKOS"
+        },
+        "types" : {
+          "type" : "literal",
+          "value" : "Semantic-model"
+        }
+      }
+    ]
+  }
+}`
 
 const mockResponse = {
   message: { code: '200', statusCode: '200' }, // not sure which is used?

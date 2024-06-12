@@ -4,23 +4,20 @@
  */
 
 // Prepare the mock expectations
-const mockEmptyTableBody = `<!DOCTYPE html>
-<html>
-<head>
-<title>HTML5 table</title>
-</head>
-<body>
-<div class="container-fluid">
-<table class="table table-striped table-sm table-borderless">
-  <tr>
-    <th>np</th>
-    <th>label</th>
-    <th>types</th>
-    <th>date</th>
-  </tr>
-</table></div>
-</body>
-</html>`
+const mockEmptyTableBody = `{
+  "head" : {
+    "vars" : [
+      "np",
+      "label",
+      "types",
+      "date"
+    ]
+  },
+  "results" : {
+    "bindings" : [
+    ]
+  }
+}`
 
 const mockNoRowResponse = {
   message: { code: '200', statusCode: '200' }, // not sure which is used?
