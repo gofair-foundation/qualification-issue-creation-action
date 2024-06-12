@@ -4,8 +4,7 @@
  */
 
 // Prepare the mock expectations
-const mockBody = 
-`{
+const mockBody = `{
   "head" : {
     "vars" : [
       "np",

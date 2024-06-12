@@ -4,8 +4,7 @@
  */
 
 // Prepare the mock expectations
-const mockEmptyTableBody = 
-`{
+const mockEmptyTableBody = `{
   "head" : {
     "vars" : [
       "np",
