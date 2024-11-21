@@ -13,7 +13,7 @@ async function createIssue(issueName, issueDescription, issueLabels) {
   core.debug(`Creating issue for ${issueName}`)
   await octokit.request('POST /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
-    repo: 'fsr_qualification',
+    repo: 'fsr_curation',
     title: issueName,
     body: issueDescription,
     labels: issueLabels,
@@ -31,7 +31,7 @@ async function closeIssue(issueNumber) {
   core.debug(`Closing issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
-    repo: 'fsr_qualification',
+    repo: 'fsr_curation',
     issue_number: issueNumber,
     state: 'closed',
     state_reason: 'not_planned',
@@ -49,7 +49,7 @@ async function reopenIssue(issueNumber) {
   core.debug(`Reopening issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
-    repo: 'fsr_qualification',
+    repo: 'fsr_curation',
     issue_number: issueNumber,
     state: 'open',
     state_reason: 'reopened',
@@ -67,7 +67,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
   core.debug(`Fetching all action-created issues, page ${issuePage}`)
   const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
-    repo: 'fsr_qualification',
+    repo: 'fsr_curation',
     state: 'all', // Can be one of: open, closed, all
     creator: 'app/github-actions',
     sort: 'created',
@@ -117,7 +117,7 @@ async function getAllActionIssues(pageSize) {
 //   core.debug(`Updating open issue ${issueNumber}`)
 //   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
 //     owner: 'gofair-foundation',
-//     repo: 'fsr_qualification',
+//     repo: 'fsr_curation',
 //     issue_number: issueNumber,
 //     body: newBody,
 //     headers: {
