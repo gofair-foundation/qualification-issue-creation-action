@@ -5,7 +5,7 @@
  * Specifically, the inputs listed in `action.yml` should be set as environment
  * variables following the pattern `INPUT_<INPUT_NAME>`.
  */
-process.env.GITHUB_WORKSPACE = '../fsr_qualification/'
+process.env.GITHUB_WORKSPACE = '../fsr_curation/'
 const core = require('@actions/core')
 const main = require('../src/main')
 

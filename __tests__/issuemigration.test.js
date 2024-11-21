@@ -4,7 +4,7 @@
  */
 
 // const core = require('@actions/core')
-process.env.GITHUB_WORKSPACE = '../fsr_qualification/'
+process.env.GITHUB_WORKSPACE = '../fsr_curation/'
 // process.env.GITHUB_TOKEN = '<TOKEN_HERE>'
 // process.env.GITHUB_ACTION = "true"
 
