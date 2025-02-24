@@ -16,7 +16,9 @@ describe('action', () => {
 
   it('Revise all issues - disarmed', async () => {
     const bodySuffix = await template.fetchTemplate()
-    expect(bodySuffix.substring(0, 9)).toStrictEqual('\n# Review')
+    expect(bodySuffix.substring(0, 25)).toStrictEqual(
+      '\n# Document quality check'
+    )
 
     // const issues = await iss.getAllActionIssues(100)
     // core.debug(`Retrieved ${issues.length} issue(s) from GitHub`)
