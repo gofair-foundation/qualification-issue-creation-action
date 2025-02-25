@@ -7,15 +7,15 @@ const core = require('@actions/core')
 
 // Prepare the mock expectations
 const mockBody = `---
-name: FSR qualification
-about: Qualifying FSRs
+name: FSR curation
+about: Curating FSRs
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-# Review
+# Document quality check
 
 | Item     | Detail     |
 | ---- | ---- |
@@ -29,7 +29,7 @@ assignees: ''
 `
 
 const expectedBodySuffix = `
-# Review
+# Document quality check
 
 | Item     | Detail     |
 | ---- | ---- |
