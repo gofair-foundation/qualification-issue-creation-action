@@ -38,6 +38,12 @@
   "eslintConfig": {
     "extends": "./.github/linters/.eslintrc.yml"
   },
+  "babel": {
+    "presets": ["@babel/preset-env"],
+    "plugins": [
+       "@babel/plugin-transform-modules-commonjs"
+    ]
+  },
   "jest": {
     "verbose": true,
     "clearMocks": true,
@@ -45,6 +51,9 @@
     "moduleFileExtensions": [
       "js"
     ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
     "testMatch": [
       "**/*.test.js"
     ],
