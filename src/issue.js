@@ -93,7 +93,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
 
 async function getAllActionIssues(pageSize) {
   let pageNumber = 1
-  const results = Array()
+  const results = []
   let issuesPage = await getActionIssuesPage(pageSize, pageNumber)
   for (const e of issuesPage) {
     results.push(e)
@@ -113,7 +113,7 @@ async function getAllActionIssues(pageSize) {
 }
 
 /* This was used for migrating open issues to include the Markdown table. */
-// async function updateIssueBody(issueNumber, newBody) {
+// async function updateIssueBody (issueNumber, newBody) {
 //   core.debug(`Updating open issue ${issueNumber}`)
 //   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
 //     owner: 'gofair-foundation',
