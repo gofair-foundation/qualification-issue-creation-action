@@ -9,7 +9,7 @@ const { JSDOM } = jsdom
  */
 async function fetchFSRs() {
   const api =
-    'https://grlc.knowledgepixels.com/api-git/peta-pico/dsw-nanopub-api/list_nonqualifed_fsr_new'
+    'https://query.knowledgepixels.com/api/RAZkMXCwJE_moP0PBZy3QshV8HyOvZwTwxT26fPcAXh7k/list_nonqualifed_fsr'
   const http = new httpm.HttpClient()
   const additionalHeaders = { ['accept']: 'application/json' }
   const res = await http.get(api, additionalHeaders)
