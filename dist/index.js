@@ -26658,7 +26658,7 @@ async function getAllActionIssues(pageSize) {
 }
 
 /* This was used for migrating open issues to include the Markdown table. */
-// async function updateIssueBody(issueNumber, newBody) {
+// async function updateIssueBody (issueNumber, newBody) {
 //   core.debug(`Updating open issue ${issueNumber}`)
 //   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
 //     owner: 'gofair-foundation',
