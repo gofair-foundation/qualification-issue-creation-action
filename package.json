@@ -38,6 +38,11 @@
   "eslintConfig": {
     "extends": "./.github/linters/.eslintrc.yml"
   },
+  "babel": {
+    "plugins": [
+       "@babel/plugin-transform-modules-commonjs"
+    ]
+  },
   "jest": {
     "verbose": true,
     "clearMocks": true,
