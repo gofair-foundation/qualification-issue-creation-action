@@ -9,7 +9,7 @@ const octokit = new Octokit({
  * Create an issue.
  * Wraps the GitHub octokit API.
  */
-async function createIssue(issueName, issueDescription, issueLabels) {
+async function createIssue (issueName, issueDescription, issueLabels) {
   core.debug(`Creating issue for ${issueName}`)
   await octokit.request('POST /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
@@ -27,7 +27,7 @@ async function createIssue(issueName, issueDescription, issueLabels) {
  * Close an issue.
  * Wraps the GitHub octokit API.
  */
-async function closeIssue(issueNumber) {
+async function closeIssue (issueNumber) {
   core.debug(`Closing issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
@@ -45,7 +45,7 @@ async function closeIssue(issueNumber) {
  * Reopen an issue.
  * Wraps the GitHub octokit API.
  */
-async function reopenIssue(issueNumber) {
+async function reopenIssue (issueNumber) {
   core.debug(`Reopening issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
@@ -63,7 +63,7 @@ async function reopenIssue(issueNumber) {
  * Get (up to 100) issues for the repo that were created by an action.
  * Newest first (as that's the order from petapico).
  */
-async function getActionIssuesPage(pageSize, issuePage) {
+async function getActionIssuesPage (pageSize, issuePage) {
   core.debug(`Fetching all action-created issues, page ${issuePage}`)
   const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
@@ -91,7 +91,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
   return records
 }
 
-async function getAllActionIssues(pageSize) {
+async function getAllActionIssues (pageSize) {
   let pageNumber = 1
   const results = []
   let issuesPage = await getActionIssuesPage(pageSize, pageNumber)
@@ -113,7 +113,7 @@ async function getAllActionIssues(pageSize) {
 }
 
 /* This was used for migrating open issues to include the Markdown table. */
-// async function updateIssueBody(issueNumber, newBody) {
+// async function updateIssueBody (issueNumber, newBody) {
 //   core.debug(`Updating open issue ${issueNumber}`)
 //   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
 //     owner: 'gofair-foundation',

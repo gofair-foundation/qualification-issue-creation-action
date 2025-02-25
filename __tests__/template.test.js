@@ -3,8 +3,6 @@
  *
  */
 
-const core = require('@actions/core')
-
 // Prepare the mock expectations
 const mockBody = `---
 name: FSR curation
@@ -43,9 +41,9 @@ const expectedBodySuffix = `
 `
 
 // Mock the GitHub Actions core library
-//const debugMock = jest.spyOn(core, 'debug').mockImplementation()
+// const debugMock = jest.spyOn(core, 'debug').mockImplementation()
 
-const fs = require('fs')
+// const fs = require('fs')
 jest.mock('fs', () => ({
   readFileSync: jest.fn(fileName => {
     return mockBody
@@ -86,7 +84,7 @@ describe('action', () => {
     const bodySuffix = await template.fetchTemplate()
 
     // assertions
-    //expect(debugMock).toHaveBeenCalledWith(mockBody)
+    // expect(debugMock).toHaveBeenCalledWith(mockBody)
     expect(bodySuffix).toStrictEqual(expectedBodySuffix)
   })
 })

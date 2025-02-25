@@ -5,7 +5,7 @@ const path = require('path')
  * Fetch the repo issue template.
  * @returns String containing a Markdown table.
  */
-async function fetchTemplate() {
+async function fetchTemplate () {
   const templatePath = '.github/ISSUE_TEMPLATE/fsr-qualification.md'
   const workspace = process.env.GITHUB_WORKSPACE
 

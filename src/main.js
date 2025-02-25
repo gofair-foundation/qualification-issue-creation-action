@@ -7,7 +7,7 @@ const template = require('../src/template')
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run(pageSize) {
+async function run (pageSize) {
   // 1. Get the GitHub issues set
   // 2. Get the Unqualified FSRs set
   // 3. Derive a close list based on set difference
