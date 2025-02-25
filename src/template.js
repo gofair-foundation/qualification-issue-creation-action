@@ -1,4 +1,3 @@
-const core = require('@actions/core')
 const fs = require('fs')
 const path = require('path')
 
@@ -12,7 +11,6 @@ async function fetchTemplate() {
 
   const templateFQPath = path.join(workspace, templatePath)
   const template = fs.readFileSync(templateFQPath, 'utf-8')
-  //core.debug(template)
 
   // Drop the first 8 lines
   const lines = String(template).split('\n')

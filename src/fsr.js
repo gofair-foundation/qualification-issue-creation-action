@@ -1,7 +1,5 @@
 const core = require('@actions/core')
 const httpm = require('@actions/http-client')
-const jsdom = require('jsdom')
-const { JSDOM } = jsdom
 
 /**
  * Fetch unqualified FSRs table as JSON and converts them to required objects.
@@ -11,6 +9,8 @@ async function fetchFSRs() {
   const api =
     'https://query.knowledgepixels.com/api/RAZkMXCwJE_moP0PBZy3QshV8HyOvZwTwxT26fPcAXh7k/list_nonqualifed_fsr'
   const http = new httpm.HttpClient()
+
+  /* eslint-disable-next-line no-useless-computed-key */
   const additionalHeaders = { ['accept']: 'application/json' }
   const res = await http.get(api, additionalHeaders)
 

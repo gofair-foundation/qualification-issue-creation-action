@@ -93,7 +93,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
 
 async function getAllActionIssues(pageSize) {
   let pageNumber = 1
-  const results = Array()
+  const results = []
   let issuesPage = await getActionIssuesPage(pageSize, pageNumber)
   for (const e of issuesPage) {
     results.push(e)
