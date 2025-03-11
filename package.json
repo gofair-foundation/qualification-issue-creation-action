@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
-    "@actions/http-client": "^2.2.0",
+    "@actions/http-client": "^2.2.3",
     "@octokit/auth-action": "^5.1.1",
     "@octokit/rest": "^21.1.1",
     "jsdom": "^26.0.0"
