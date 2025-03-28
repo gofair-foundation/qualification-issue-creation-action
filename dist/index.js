@@ -26507,7 +26507,7 @@ const httpm = __nccwpck_require__(6255)
  */
 async function fetchFSRs() {
   const api =
-    'https://query.knowledgepixels.com/api/RAZkMXCwJE_moP0PBZy3QshV8HyOvZwTwxT26fPcAXh7k/list_nonqualifed_fsr'
+    'https://query.knowledgepixels.com/api/RA7gF4IoWKT3AMIcueQYIRdePPBzF4_htbZ_RTFLmcdds/list_nonqualifed_fsr'
   const http = new httpm.HttpClient()
 
   /* eslint-disable-next-line no-useless-computed-key */
