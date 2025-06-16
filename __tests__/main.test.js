@@ -6,6 +6,7 @@
  * variables following the pattern `INPUT_<INPUT_NAME>`.
  */
 process.env.GITHUB_WORKSPACE = '../fsr_curation/'
+process.env.QUERYAPI = 'https://example.com/dummy'
 const core = require('@actions/core')
 const main = require('../src/main')
 
@@ -169,25 +170,29 @@ describe('action', () => {
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       5,
-      'HTTP response status code: 200'
+      'API endpoint: https://example.com/dummy'
     )
     expect(debugMock).toHaveBeenNthCalledWith(
       6,
+      'HTTP response status code: 200'
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(
+      7,
       'Retrieved 3 unqualified FSR(s) from Petapico'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(7, 'Closing issue 34')
-    expect(debugMock).toHaveBeenNthCalledWith(8, 'Closed 1 obsolete issue(s)')
+    expect(debugMock).toHaveBeenNthCalledWith(8, 'Closing issue 34')
+    expect(debugMock).toHaveBeenNthCalledWith(9, 'Closed 1 obsolete issue(s)')
     expect(debugMock).toHaveBeenNthCalledWith(
-      9,
+      10,
       'Creating issue for Test ROHub'
     )
     expect(debugMock).toHaveBeenNthCalledWith(
-      10,
+      11,
       'Created issue(s) for 1 new unqualified FSRs'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(11, 'Reopening issue 11')
+    expect(debugMock).toHaveBeenNthCalledWith(12, 'Reopening issue 11')
     expect(debugMock).toHaveBeenNthCalledWith(
-      12,
+      13,
       'Reopened 1 unresolved issue(s)'
     )
   })
