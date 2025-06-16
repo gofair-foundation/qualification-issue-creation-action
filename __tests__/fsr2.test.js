@@ -3,6 +3,8 @@
  * Created a copy as the mockReturnValueOnce was causing problems.
  */
 
+process.env.QUERYAPI = 'https://example.com/dummy'
+
 // Prepare the mock expectations
 const mockEmptyTableBody = `{
   "head" : {

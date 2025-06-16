@@ -6,8 +6,9 @@ const httpm = require('@actions/http-client')
  * @returns Array of retrieved records
  */
 async function fetchFSRs() {
-  const api =
-    'https://query.knowledgepixels.com/api/RA7gF4IoWKT3AMIcueQYIRdePPBzF4_htbZ_RTFLmcdds/list_nonqualifed_fsr'
+  const api = process.env.QUERYAPI
+  core.debug(`API endpoint: ${api}`)
+
   const http = new httpm.HttpClient()
 
   /* eslint-disable-next-line no-useless-computed-key */

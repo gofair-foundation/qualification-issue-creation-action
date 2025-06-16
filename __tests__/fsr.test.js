@@ -3,6 +3,8 @@
  *
  */
 
+process.env.QUERYAPI = 'https://example.com/dummy'
+
 // Prepare the mock expectations
 const mockBody = `{
   "head" : {

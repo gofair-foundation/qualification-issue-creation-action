@@ -1,11 +1,55 @@
 # Qualification Issue Action
 
-[![GitHub Super-Linter](https://github.com/actions/javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/javascript-action/actions/workflows/ci.yml/badge.svg)
+This is a custom action to create issues for FAIR supporting resources that need to be curated.
 
-Use this template to bootstrap the creation of a JavaScript action. 
+## Process flow
 
+```mermaid
+flowchart LR
+	start((start))-->pp[[PetaPico API request]]
+	pp-->rows[/Unqualified FSRs/]-->set
+	start-->gh[[GitHub API]]-->iss[/Issues/]-->set
+	subgraph "Per row"
+    set{Set\ncomparison\nlogic}
+    set -->|Already exists|finish
+    set -->|Newly unqualified|create
+    set -->|Obsolete|close
+    set -->|Prematurely closed|reopen
+    finish((end))
+	  
+	  create[["Create GitHub issue"]]-->finish
+	  close[["Close GitHub issue"]]-->finish
+	  reopen[["Reopen GitHub issue"]]-->finish
+	end
+```
 
+## Action usage
+
+The action needs two configuration properties in the env:
+  1. _GITHUB_TOKEN_ - use `${{ secrets.GITHUB_TOKEN }}`
+  2. _QUERYAPI_ - the KnowledgePixels endpoint
+
+e.g.
+```
+jobs:
+  issue_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the template
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+      - name: Create issues
+        uses: gofair-foundation/qualification-issue-creation-action@v0.12
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUERYAPI = https://query.knowledgepixels.com/api/RA7gF4IoWKT3AMIcueQYIRdePPBzF4_htbZ_RTFLmcdds/list_nonqualifed_fsr
+```
+----
+# Development instructions
+
+These are retained from the template project.
 
 ## Initial Setup
 
@@ -21,19 +65,19 @@ need to perform some initial setup steps before you can develop your action.
 > root of your repository to install the version specified in
 > [`package.json`](./package.json). Otherwise, 20.x or later should work!
 
-1. :hammer_and_wrench: Install the dependencies
+1. Install the dependencies
 
    ```bash
    npm install
    ```
 
-1. :building_construction: Package the JavaScript for distribution
+2. Package the JavaScript for distribution
 
    ```bash
    npm run bundle
    ```
 
-1. :white_check_mark: Run the tests
+3. Run the tests
 
    ```bash
    $ npm test
@@ -106,27 +150,4 @@ So, what are you waiting for? Go ahead and start customizing your action!
 Your action is now published! 
 
 
-
------
-
-# Process flow
-
-```mermaid
-flowchart LR
-	start((start))-->pp[[PetaPico API request]]
-	pp-->rows[/Unqualified FSRs/]-->set
-	start-->gh[[GitHub API]]-->iss[/Issues/]-->set
-	subgraph "Per row"
-    set{Set\ncomparison\nlogic}
-    set -->|Already exists|finish
-    set -->|Newly unqualified|create
-    set -->|Obsolete|close
-    set -->|Prematurely closed|reopen
-    finish((end))
-	  
-	  create[["Create GitHub issue"]]-->finish
-	  close[["Close GitHub issue"]]-->finish
-	  reopen[["Reopen GitHub issue"]]-->finish
-	end
-```
 
