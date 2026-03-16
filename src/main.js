@@ -1,13 +1,14 @@
-const core = require('@actions/core')
-const fsr = require('./fsr')
-const iss = require('./issue')
-const template = require('../src/template')
+import * as core from '@actions/core'
+
+import * as fsr from './fsr.js'
+import * as iss from './issue.js'
+import * as template from './template.js'
 
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run(pageSize) {
+export async function run(pageSize) {
   // 1. Get the GitHub issues set
   // 2. Get the Unqualified FSRs set
   // 3. Derive a close list based on set difference
@@ -21,8 +22,8 @@ async function run(pageSize) {
     core.debug(`Issues page size set to ${pageSize}`)
     const issues = await iss.getAllActionIssues(pageSize)
     core.debug(`Retrieved ${issues.length} issue(s) from GitHub`)
-    const openIssues = issues.filter(x => x.state === 'open')
-    const closedIssues = issues.filter(x => x.state === 'closed')
+    const openIssues = issues.filter((x) => x.state === 'open')
+    const closedIssues = issues.filter((x) => x.state === 'closed')
 
     const fsrs = await fsr.fetchFSRs()
     core.debug(`Retrieved ${fsrs.length} unqualified FSR(s) from Petapico`)
@@ -33,20 +34,20 @@ async function run(pageSize) {
 
     // Find the open issues without a corresponding unqualified FSR
     const obsolete = openIssues.filter(
-      x => !fsrs.some(e => e.np === x.firstLine)
+      (x) => !fsrs.some((e) => e.np === x.firstLine)
     )
 
     // Find unqualified FSRs without an issue (open or closed)
     const newlyUnqualified = fsrs.filter(
-      x => !issues.some(e => e.firstLine === x.np)
+      (x) => !issues.some((e) => e.firstLine === x.np)
     )
 
     // Intersection of closed issues and unqualified FSRs
     const reopen = closedIssues
-      .filter(x => fsrs.some(e => e.np === x.firstLine))
+      .filter((x) => fsrs.some((e) => e.np === x.firstLine))
       .filter(
         // check the open issues in case it was closed as a duplicate
-        c => !openIssues.some(o => o.firstLine === c.firstLine)
+        (c) => !openIssues.some((o) => o.firstLine === c.firstLine)
       )
 
     // Process the three lists: close, create, reopen
@@ -74,8 +75,4 @@ async function run(pageSize) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
   }
-}
-
-module.exports = {
-  run
 }

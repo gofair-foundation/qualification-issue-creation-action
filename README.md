@@ -1,6 +1,7 @@
 # Qualification Issue Action
 
-This is a custom action to create issues for FAIR supporting resources that need to be curated.
+This is a custom action to create issues for FAIR supporting resources that need
+to be curated.
 
 ## Process flow
 
@@ -16,7 +17,7 @@ flowchart LR
     set -->|Obsolete|close
     set -->|Prematurely closed|reopen
     finish((end))
-	  
+
 	  create[["Create GitHub issue"]]-->finish
 	  close[["Close GitHub issue"]]-->finish
 	  reopen[["Reopen GitHub issue"]]-->finish
@@ -26,10 +27,12 @@ flowchart LR
 ## Action usage
 
 The action needs two configuration properties in the env:
-  1. _GITHUB_TOKEN_ - use `${{ secrets.GITHUB_TOKEN }}`
-  2. _QUERYAPI_ - the KnowledgePixels endpoint
+
+1. _GITHUB_TOKEN_ - use `${{ secrets.GITHUB_TOKEN }}`
+2. _QUERYAPI_ - the KnowledgePixels endpoint
 
 e.g.
+
 ```
 jobs:
   issue_job:
@@ -46,7 +49,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QUERYAPI: https://query.knowledgepixels.com/api/RA7gF4IoWKT3AMIcueQYIRdePPBzF4_htbZ_RTFLmcdds/list_nonqualifed_fsr
 ```
-----
+
+---
+
 # Development instructions
 
 These are retained from the template project.
@@ -81,12 +86,12 @@ need to perform some initial setup steps before you can develop your action.
 
    ```bash
    $ npm test
-   
+
    PASS  ./index.test.js
      ✓ throws invalid number (3ms)
      ✓ wait 500 ms (504ms)
      ✓ test runs (95ms)
-   
+
    ...
    ```
 
@@ -101,9 +106,10 @@ inputs, and outputs for your action.
 
 ## Update the Action Code
 
-The [`src/`](./src/) directory is the heart of your action! 
+The [`src/`](./src/) directory is the heart of your action!
 
-For more information about the GitHub Actions toolkit, see the [documentation](https://github.com/actions/toolkit/blob/master/README.md).
+For more information about the GitHub Actions toolkit, see the
+[documentation](https://github.com/actions/toolkit/blob/master/README.md).
 
 So, what are you waiting for? Go ahead and start customizing your action!
 
@@ -147,7 +153,4 @@ So, what are you waiting for? Go ahead and start customizing your action!
 1. Merge the pull request into the `main` branch
 1. Create a tag
 
-Your action is now published! 
-
-
-
+Your action is now published!
