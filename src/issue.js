@@ -1,6 +1,7 @@
-const core = require('@actions/core')
-const { Octokit } = require('@octokit/rest')
-const { createActionAuth } = require('@octokit/auth-action')
+import * as core from '@actions/core'
+import { Octokit } from '@octokit/rest'
+import { createActionAuth } from '@octokit/auth-action'
+
 const octokit = new Octokit({
   authStrategy: createActionAuth
 })
@@ -9,7 +10,7 @@ const octokit = new Octokit({
  * Create an issue.
  * Wraps the GitHub octokit API.
  */
-async function createIssue(issueName, issueDescription, issueLabels) {
+export async function createIssue(issueName, issueDescription, issueLabels) {
   core.debug(`Creating issue for ${issueName}`)
   await octokit.request('POST /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
@@ -27,7 +28,7 @@ async function createIssue(issueName, issueDescription, issueLabels) {
  * Close an issue.
  * Wraps the GitHub octokit API.
  */
-async function closeIssue(issueNumber) {
+export async function closeIssue(issueNumber) {
   core.debug(`Closing issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
@@ -45,7 +46,7 @@ async function closeIssue(issueNumber) {
  * Reopen an issue.
  * Wraps the GitHub octokit API.
  */
-async function reopenIssue(issueNumber) {
+export async function reopenIssue(issueNumber) {
   core.debug(`Reopening issue ${issueNumber}`)
   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
     owner: 'gofair-foundation',
@@ -63,7 +64,7 @@ async function reopenIssue(issueNumber) {
  * Get (up to 100) issues for the repo that were created by an action.
  * Newest first (as that's the order from petapico).
  */
-async function getActionIssuesPage(pageSize, issuePage) {
+export async function getActionIssuesPage(pageSize, issuePage) {
   core.debug(`Fetching all action-created issues, page ${issuePage}`)
   const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
     owner: 'gofair-foundation',
@@ -81,7 +82,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
 
   // map necessary fields & return
   // #48 Remove any carriage returns from the first line
-  const records = response.data.map(x => ({
+  const records = response.data.map((x) => ({
     number: x.number,
     body: x.body,
     firstLine: String(x.body).split('\n')[0].replace(/\r/g, ''),
@@ -91,7 +92,7 @@ async function getActionIssuesPage(pageSize, issuePage) {
   return records
 }
 
-async function getAllActionIssues(pageSize) {
+export async function getAllActionIssues(pageSize) {
   let pageNumber = 1
   const results = []
   let issuesPage = await getActionIssuesPage(pageSize, pageNumber)
@@ -110,26 +111,4 @@ async function getAllActionIssues(pageSize) {
   }
 
   return results
-}
-
-/* This was used for migrating open issues to include the Markdown table. */
-// async function updateIssueBody (issueNumber, newBody) {
-//   core.debug(`Updating open issue ${issueNumber}`)
-//   await octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
-//     owner: 'gofair-foundation',
-//     repo: 'fsr_curation',
-//     issue_number: issueNumber,
-//     body: newBody,
-//     headers: {
-//       'X-GitHub-Api-Version': '2022-11-28'
-//     }
-//   })
-// }
-
-module.exports = {
-  createIssue,
-  closeIssue,
-  reopenIssue,
-  // updateIssueBody,
-  getAllActionIssues
 }

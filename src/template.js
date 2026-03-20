@@ -1,11 +1,11 @@
-const fs = require('fs')
-const path = require('path')
+import * as fs from 'fs'
+import * as path from 'path'
 
 /**
  * Fetch the repo issue template.
  * @returns String containing a Markdown table.
  */
-async function fetchTemplate() {
+export async function fetchTemplate() {
   const templatePath = '.github/ISSUE_TEMPLATE/fsr-qualification.md'
   const workspace = process.env.GITHUB_WORKSPACE
 
@@ -16,8 +16,4 @@ async function fetchTemplate() {
   const lines = String(template).split('\n')
   lines.splice(0, 8)
   return lines.join('\n')
-}
-
-module.exports = {
-  fetchTemplate
 }

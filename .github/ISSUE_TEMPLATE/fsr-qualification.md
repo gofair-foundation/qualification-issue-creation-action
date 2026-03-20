@@ -4,7 +4,6 @@ about: Curating FSRs
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 # Document quality check

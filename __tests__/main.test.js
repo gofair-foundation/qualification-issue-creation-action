@@ -1,16 +1,24 @@
 /**
- * Unit tests for the action's main functionality, src/main.ts
+ * Unit tests for the action's main functionality, src/main.js
  *
- * These should be run as if the action was called from a workflow.
- * Specifically, the inputs listed in `action.yml` should be set as environment
- * variables following the pattern `INPUT_<INPUT_NAME>`.
+ * To mock dependencies in ESM, you can create fixtures that export mock
+ * functions and objects. For example, the core module is mocked in this test,
+ * so that the actual '@actions/core' module is not imported.
  */
 process.env.GITHUB_WORKSPACE = '../fsr_curation/'
 process.env.QUERYAPI = 'https://example.com/dummy'
-const core = require('@actions/core')
-const main = require('../src/main')
 
-jest.mock('@octokit/rest', () => {
+// If you need these two env variables then it means that mocking has failed!
+// process.env.GITHUB_ACTION = 'true'
+// process.env.GITHUB_TOKEN = '<TOKEN_HERE>'
+
+import { jest } from '@jest/globals'
+import * as core from '../__fixtures__/core.js'
+
+// Mocks should be declared before the module being tested is imported.
+jest.unstable_mockModule('@actions/core', () => core)
+
+jest.unstable_mockModule('@octokit/rest', () => {
   // Return the mock constructed instance
   return {
     Octokit: jest.fn().mockImplementation(() => {
@@ -128,7 +136,7 @@ const mockResponse = {
   })
 }
 
-jest.mock('@actions/http-client', () => {
+jest.unstable_mockModule('@actions/http-client', () => {
   // Return the mock constructed instance
   return {
     HttpClient: jest.fn().mockImplementation(() => {
@@ -139,75 +147,74 @@ jest.mock('@actions/http-client', () => {
   }
 })
 
-// Mock the GitHub Actions core library
-const debugMock = jest.spyOn(core, 'debug').mockImplementation()
+// The module being tested should be imported dynamically. This ensures that the
+// mocks are used in place of any actual dependencies.
+const { run } = await import('../src/main.js')
 
-// Spy on the action's main function
-const runMock = jest.spyOn(main, 'run')
-
-describe('action', () => {
+describe('main.js', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('creates some issues', async () => {
-    await main.run(10)
-    expect(runMock).toHaveReturned()
+    await run(10)
 
     // Verify that the collaborators were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Issues page size set to 10')
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(1, 'Issues page size set to 10')
+    expect(core.debug).toHaveBeenNthCalledWith(
       2,
       'Fetching all action-created issues, page 1'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       3,
       'Issues in page: 4, page size: 10'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       4,
       'Retrieved 4 issue(s) from GitHub'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       5,
       'API endpoint: https://example.com/dummy'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       6,
       'HTTP response status code: 200'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       7,
       'Retrieved 3 unqualified FSR(s) from Petapico'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(8, 'Closing issue 34')
-    expect(debugMock).toHaveBeenNthCalledWith(9, 'Closed 1 obsolete issue(s)')
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(8, 'Closing issue 34')
+    expect(core.debug).toHaveBeenNthCalledWith(9, 'Closed 1 obsolete issue(s)')
+    expect(core.debug).toHaveBeenNthCalledWith(
       10,
       'Creating issue for Test ROHub'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       11,
       'Created issue(s) for 1 new unqualified FSRs'
     )
-    expect(debugMock).toHaveBeenNthCalledWith(12, 'Reopening issue 11')
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(12, 'Reopening issue 11')
+    expect(core.debug).toHaveBeenNthCalledWith(
       13,
       'Reopened 1 unresolved issue(s)'
     )
   })
 
-  const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
   it('Set to fail on error', async () => {
     // Force an error
-    debugMock.mockImplementation(() => {
+    core.debug.mockImplementation(() => {
       throw new Error('Fail')
     })
 
-    await main.run(1)
-    expect(runMock).toHaveReturned()
+    await run(1)
 
     // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(1, 'Fail')
+    expect(core.setFailed).toHaveBeenNthCalledWith(1, 'Fail')
   })
 })
